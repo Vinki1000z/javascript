@@ -827,6 +827,51 @@
    []==[] or []===[] //false, refer different objects in memory
    {}=={} or {}==={} //false, refer different objects in memory
    ```
+const person1 = {
+  firstName:"Mary",
+  lastName: "Doe"
+}
+
+const person2 = {
+  firstName:"Mary",
+  lastName: "Doe"
+}
+console.log(person1 == person2)
+but i want to companre there values
+ChatGPT said:
+In JavaScript, when you use == or === to compare objects, it compares their references, not their values. Since person1 and person2 are two different objects stored at different memory locations, person1 == person2 will return false.
+
+Solution: Compare Their Values Instead
+To compare the values of person1 and person2, you can convert them to JSON strings:
+
+javascript
+Copy
+Edit
+console.log(JSON.stringify(person1) === JSON.stringify(person2)); // true
+✅ Why does this work?
+
+JSON.stringify(person1) converts the object into a string.
+JSON.stringify(person2) does the same.
+The comparison now happens by value, not by reference.
+Alternative: Compare Properties Manually
+For a deep object comparison (which handles nested objects), you can use:
+
+javascript
+Copy
+Edit
+function isEqual(obj1, obj2) {
+    return Object.keys(obj1).length === Object.keys(obj2).length &&
+           Object.keys(obj1).every(key => obj1[key] === obj2[key]);
+}
+
+console.log(isEqual(person1, person2)); // true
+🔴 Note: This works only for shallow objects. For deep comparison (nested objects), use a library like Lodash:
+
+javascript
+Copy
+Edit
+const _ = require('lodash');
+console.log(_.isEqual(person1, person2)); // true
 
    **[⬆ Back to Top](#table-of-contents)**
 
