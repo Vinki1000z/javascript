@@ -2116,6 +2116,132 @@ let is hoisted but not initialized, so accessing it before declaration gives an 
     2. Bottom to Top (Event Bubbling)
 
     **[⬆ Back to Top](#table-of-contents)**
+📌 Event Flow in JavaScript (Capturing & Bubbling)
+In JavaScript, event flow determines how events propagate through the DOM. It has three phases:
+
+1️⃣ Capturing Phase (Event moves from the root to the target element).
+2️⃣ Target Phase (Event reaches the target element).
+3️⃣ Bubbling Phase (Event moves back up from the target to the root).
+
+🔹 Example: Event Bubbling (Default Behavior)
+In event bubbling, the event starts at the target element and moves up to the root.
+
+📝 Example
+html
+Copy
+Edit
+<div id="parent" style="padding: 20px; background: lightblue;">
+    <button id="child">Click Me</button>
+</div>
+
+<script>
+document.getElementById("parent").addEventListener("click", () => {
+    console.log("Parent Clicked");
+});
+
+document.getElementById("child").addEventListener("click", () => {
+    console.log("Child Clicked");
+});
+</script>
+🛠️ Output (Click on Button)
+nginx
+Copy
+Edit
+Child Clicked
+Parent Clicked
+✔ The event bubbles up from #child to #parent.
+
+🔹 Example: Event Capturing (Use true as Third Parameter)
+In event capturing, the event moves from the root down to the target element.
+
+📝 Example
+html
+Copy
+Edit
+<div id="parent" style="padding: 20px; background: lightcoral;">
+    <button id="child">Click Me</button>
+</div>
+
+<script>
+document.getElementById("parent").addEventListener("click", () => {
+    console.log("Parent Clicked");
+}, true); // Capturing mode
+
+document.getElementById("child").addEventListener("click", () => {
+    console.log("Child Clicked");
+});
+</script>
+🛠️ Output (Click on Button)
+nginx
+Copy
+Edit
+Parent Clicked
+Child Clicked
+✔ The event is captured from #parent to #child.
+
+🔹 Example: Stopping Event Propagation
+We can stop event bubbling or capturing using event.stopPropagation().
+
+📝 Example
+html
+Copy
+Edit
+<div id="parent" style="padding: 20px; background: lightgreen;">
+    <button id="child">Click Me</button>
+</div>
+
+<script>
+document.getElementById("parent").addEventListener("click", () => {
+    console.log("Parent Clicked");
+});
+
+document.getElementById("child").addEventListener("click", (event) => {
+    console.log("Child Clicked");
+    event.stopPropagation(); // Stops the event from bubbling up
+});
+</script>
+🛠️ Output (Click on Button)
+nginx
+Copy
+Edit
+Child Clicked
+✔ stopPropagation() prevents parent from getting triggered.
+
+🔹 Example: event.preventDefault()
+If you want to stop the default behavior of an event, use event.preventDefault().
+
+📝 Example: Preventing Form Submission
+html
+Copy
+Edit
+<form id="myForm">
+    <input type="text" placeholder="Type something">
+    <button type="submit">Submit</button>
+</form>
+
+<script>
+document.getElementById("myForm").addEventListener("submit", (event) => {
+    event.preventDefault(); // Prevents form submission
+    console.log("Form submission prevented!");
+});
+</script>
+✔ The form won't reload the page due to preventDefault().
+
+🎯 Key Takeaways
+✅ Event Bubbling (Default): Target → Parent → Root.
+✅ Event Capturing (true in addEventListener): Root → Parent → Target.
+✅ event.stopPropagation(): Stops event from bubbling/capturing.
+✅ event.preventDefault(): Prevents default behavior (e.g., form submission, link navigation).
+
+Let me know if you need more details! 🚀
+
+
+
+
+
+
+
+
 
 86. ### What is event bubbling
 
@@ -2207,6 +2333,80 @@ let is hoisted but not initialized, so accessing it before declaration gives an 
     The `DOMContentLoaded` event is fired when the initial HTML document has been completely loaded and parsed, without waiting for assets(stylesheets, images, and subframes) to finish loading. Whereas The load event is fired when the whole page has loaded, including all dependent resources(stylesheets, images).
 
     **[⬆ Back to Top](#table-of-contents)**
+Difference Between DOMContentLoaded and load Events in JavaScript
+Both events are triggered when a webpage is loaded, but they fire at different times.
+
+1️⃣ DOMContentLoaded Event
+Fires when the HTML is fully loaded and parsed, before stylesheets, images, and other resources finish loading.
+Does not wait for external resources (e.g., images, CSS, or scripts).
+Useful when you want to manipulate the DOM as soon as it is ready.
+📝 Example
+javascript
+Copy
+Edit
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("DOM is ready, but images & styles may still be loading.");
+});
+✅ Use case: When you need to manipulate elements as soon as they are available.
+
+2️⃣ load Event
+Fires only after the entire page (including images, styles, and subframes) has loaded.
+Waits for all resources to be downloaded before executing the script.
+📝 Example
+javascript
+Copy
+Edit
+window.addEventListener("load", () => {
+    console.log("Entire page is fully loaded, including images and styles.");
+});
+✅ Use case: When you need to execute scripts that depend on fully loaded resources (e.g., measuring image sizes).
+
+🔹 Key Differences
+Feature	DOMContentLoaded	load
+When it Fires	After HTML is parsed	After entire page loads
+Waits for Images, CSS?	❌ No	✅ Yes
+When to Use?	Modify DOM early	Ensure everything is loaded
+🔹 Example Demonstration
+html
+Copy
+Edit
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Event Demo</title>
+</head>
+<body>
+    <h1>Event Timing</h1>
+    <img src="large-image.jpg" alt="Large Image">
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            console.log("DOM is ready!");
+        });
+
+        window.addEventListener("load", () => {
+            console.log("Page fully loaded!");
+        });
+    </script>
+</body>
+</html>
+🛠️ Expected Output in Console
+arduino
+Copy
+Edit
+DOM is ready!
+Page fully loaded!
+✅ First DOMContentLoaded fires, then load after all resources are loaded.
+
+Let me know if you need more clarification! 🚀
+
+
+
+
+
+
+
+
 
 91. ### What is the difference between native, host and user objects
 
@@ -2409,7 +2609,74 @@ let is hoisted but not initialized, so accessing it before declaration gives an 
      ```
 
      **[⬆ Back to Top](#table-of-contents)**
+clearTimeout(timeoutID)
+Cancels a scheduled setTimeout().
+Example: Cancel timeout before execution
+javascript
+Copy
+Edit
+const timeoutId = setTimeout(() => {
+    console.log("This will never run");
+}, 5000);
 
+clearTimeout(timeoutId);
+✅ Use case: Prevent an unnecessary action if a condition changes.
+
+4️⃣ clearInterval(intervalID)
+Stops a running setInterval().
+Example: Stop interval after 3 seconds
+javascript
+Copy
+Edit
+const intervalId = setInterval(() => {
+    console.log("Running...");
+}, 1000);
+
+setTimeout(() => {
+    clearInterval(intervalId);
+    console.log("Stopped!");
+}, 3000);
+✅ Use case: Stop repetitive tasks when no longer needed.
+
+5️⃣ requestAnimationFrame(callback) (Better for Animations)
+Optimized for animations, runs before the next repaint.
+More efficient than setInterval because it pauses on inactive tabs.
+Example: Smooth Animation
+javascript
+Copy
+Edit
+function animate() {
+    console.log("Animating...");
+    requestAnimationFrame(animate); // Loops
+}
+requestAnimationFrame(animate);
+✅ Use case: Smooth animations (e.g., moving elements).
+
+6️⃣ cancelAnimationFrame(requestID)
+Stops a scheduled requestAnimationFrame().
+Example: Stop Animation
+javascript
+Copy
+Edit
+let requestId = requestAnimationFrame(animate);
+
+setTimeout(() => {
+    cancelAnimationFrame(requestId);
+    console.log("Animation stopped");
+}, 5000);
+✅ Use case: Stop animations when a condition is met.
+
+7️⃣ setImmediate(callback) (Node.js only)
+Executes immediately after I/O tasks but before setTimeout(0).
+Not available in the browser.
+Example (Node.js)
+javascript
+Copy
+Edit
+setImmediate(() => {
+    console.log("Executed immediately after I/O tasks");
+});
+✅ Use case: Run code after I/O but before the next event loop itera
 107. ### What is the use of setInterval
 
      The setInterval() method is used to call a function or evaluate an expression at specified intervals (in milliseconds). For example, let's log a message after 2 seconds using setInterval method,
