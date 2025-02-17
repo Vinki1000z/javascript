@@ -957,7 +957,13 @@ console.log(_.isEqual(person1, person2)); // true
     ```
 
     Curried functions are great to improve **code reusability** and **functional composition**.
+function curriedAdd(a) {
+  return function(b) {
+    return a + b;
+  };
+}
 
+console.log(curriedAdd(2)(3)); // 5
     **[⬆ Back to Top](#table-of-contents)**
 
 16. ### What is a pure function
@@ -1030,7 +1036,65 @@ console.log(_.isEqual(person1, person2)); // true
     }
     userDetails("John");
     ```
+Difference Between var and let in JavaScript
+Feature	var (Function Scope)	let (Block Scope)
+Scope	Function-scoped	Block-scoped (inside {})
+Hoisting	Hoisted with undefined	Hoisted but not initialized
+Redeclaration	Allowed in the same scope	Not allowed in the same scope
+Global Object Property	Becomes window.varName in browsers	Does not attach to window
+1. Function Scope (var)
+var is function-scoped, meaning it is accessible anywhere inside the function where it is declared.
 
+Example: var inside a function
+javascript
+Copy
+Edit
+function test() {
+    if (true) {
+        var a = 10; // Declared inside the if block
+    }
+    console.log(a); // ✅ Accessible (function-scoped)
+}
+test(); // 10
+✅ Why does a remain accessible?
+Because var is not limited by block scope, it exists throughout the function.
+
+Example: Hoisting in var
+javascript
+Copy
+Edit
+console.log(x); // undefined (hoisted)
+var x = 5;
+console.log(x); // 5
+✅ Why?
+var x is hoisted to the top and initialized with undefined.
+
+2. Block Scope (let)
+let is block-scoped, meaning it only exists inside {}.
+
+Example: let inside a block
+javascript
+Copy
+Edit
+function test() {
+    if (true) {
+        let b = 20;
+        console.log(b); // ✅ Works inside the block
+    }
+    console.log(b); // ❌ Error: b is not defined
+}
+test();
+🚨 Why does this error occur?
+Because let is block-scoped and not accessible outside {}.
+
+Example: Hoisting in let
+javascript
+Copy
+Edit
+console.log(y); // ❌ ReferenceError: Cannot access 'y' before initialization
+let y = 5;
+🚨 Why?
+let is hoisted but not initialized, so accessing it before declaration gives an error.
     **[⬆ Back to Top](#table-of-contents)**
 
 19. ### What is the reason to choose the name let as a keyword
